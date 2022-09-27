@@ -1,6 +1,6 @@
 # Library
 
-Library is created with HTML, CSS(Sass), JavaScript.
+Library is created with HTML, CSS, JavaScript.
 
 <!-- ![Preview](img/) -->
 
