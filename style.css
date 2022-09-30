@@ -25,13 +25,28 @@ body {
     max-width: 1200px;
     padding: 10px 20px;
     margin: 0 auto;
-  }
+}
 
 /* MAIN */
 
 main {
-    display: flex;
     flex: 1;
+    padding: 0 20px;
+}
+
+table {
+    background-color: grey;
+    width: min(1160px, 100%);
+    margin: 4.5vw auto;
+    border-collapse: collapse;
+}
+
+td {
+    border-bottom: solid;
+}
+
+th {
+    text-align: left;
 }
 
 /* FOOTER */
