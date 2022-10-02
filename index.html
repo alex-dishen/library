@@ -120,5 +120,37 @@
         <a href="https://github.com/alex-dishen" target="_blank">
             <img src="./img/github.svg" class="github"></a>
     </footer>
+
+    <div class="modal">
+        <form>
+            <h3>Add new book</h3>
+            <input type="text" placeholder="Title">
+            <input type="text" placeholder="Author">
+            <input type="number" placeholder="Pages">
+            <input type="number" placeholder="Year">
+            <div class="rating">
+                <div class="stars">
+                    <img src="img/star.svg">
+                    <img src="img/star.svg">
+                    <img src="img/star.svg">
+                    <img src="img/star.svg">
+                    <img src="img/star.svg">
+                    <div class="star-overlay"></div>
+                </div>
+                <div class="rate-options">
+                    <label for="rate-value">Value</label>
+                    <input type="number" id='rate-value' value="3.4" step="0.1" min="0.1" max="5">
+                    <label>Max</label>
+                    <div class="max-value">5</div>
+                </div>
+            </div>
+            <div class="checkbox-container">
+                <label for="checkbox">Have you read?</label>
+                <input type="checkbox" id="checkbox">
+            </div>
+            <div><button>Submit</button></div>
+        </form>
+    </div>
+    <div class="overlay"></div>
 </body>
 </html>

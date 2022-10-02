@@ -101,7 +101,8 @@ td {
 
 .read-book, 
 .not-read-book, 
-.delete-btn {
+.delete-btn,
+form button {
     font-size: var(--font-14px);
     padding: 5px 12px;
     border: none;
@@ -142,6 +143,130 @@ footer {
 
 .github:hover {
     transform: rotate(360deg) scale(1.2);
+}
+
+/* MODAL */
+
+.overlay {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal {
+    position: absolute;
+    z-index: 1;
+    width: 320px;
+    top: 50%;
+    left: 50%;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: var(--grey);
+    transform: translate(-50%, -50%) scale(0);
+    transition: 0.3s ease-in-out;
+}
+
+.modal.active {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+h3 {
+    margin: 0;
+    text-align: center;
+}
+
+form h3 ~ * {
+    margin-top: 20px;
+}
+
+input[type=text], input[type=number] {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+}
+
+input::placeholder, 
+form button,
+label,
+input,
+.max-value
+ {
+    font-weight: 500;
+}
+
+.rating {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stars{
+    position: relative;
+}
+
+.stars img {
+    height: 30px;
+    cursor: default;
+}
+
+.star-overlay {
+    position: absolute;
+    z-index: 1;
+    background-color: black;
+    mix-blend-mode: color;
+    width: 32%;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.rate-options {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 13px;
+}
+
+#rate-value {
+    height: 35px;
+    width: 70px;
+}
+
+.max-value {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 35px;
+    width: 40px;
+    background-color: white;
+    border-radius: 8px;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 13px;
+}
+
+input[type='checkbox'] {
+  width: 23px;
+  height: 23px;
+  margin-top: 4px;
+  accent-color: white;
+  cursor: pointer;
+}
+
+
+form button {
+    background-color: rgb(181, 253, 166);
+    font-size: var(--font-18px);
+    width: 100%;
+    padding: 13px;
 }
 
 /* MEDIA QUERIES */
