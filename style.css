@@ -90,11 +90,6 @@ td:last-child {
     padding-right: 30px;
 }
 
-td:nth-child(6) {
-    position: relative;
-    white-space: nowrap;
-}
-
 td {
     padding: 20px 8px 20px 8px;
     border-bottom: 1px solid var(--grey);
@@ -123,6 +118,14 @@ form button {
 .not-read-book {
     background-color: rgb(231, 240, 254);
     color: rgb(117, 144, 224);
+}
+
+.stars-container {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    width: 135px;
+    margin: 0 auto;
 }
 
 img[src*='star'] {

@@ -77,6 +77,7 @@ function displayBook() {
     const readCell = document.createElement('td');
     const readButton = document.createElement('button');
     const starsCell = document.createElement('td');
+    const starsContainer = document.createElement('div');
     const starsOverlay = document.createElement('div');
     const deleteCell = document.createElement('td');
     const deleteButton = document.createElement('button');
@@ -93,13 +94,15 @@ function displayBook() {
         readButton.classList.add('not-read-book');
         readButton.textContent = 'Not read'
     }
+    starsContainer.classList.add('stars-container')
+    starsCell.appendChild(starsContainer);
     for(let i = 0; i < 5; i++) {
         const star = document.createElement('img');
         star.setAttribute('src', 'img/star.svg');
-        starsCell.appendChild(star);
+        starsContainer.appendChild(star);
     }
     starsOverlay.classList.add('star-overlay');
-    starsCell.appendChild(starsOverlay);
+    starContainer.appendChild(starOverlay)
     deleteButton.classList.add('delete-btn');
     deleteButton.textContent = 'Delete';
     deleteCell.appendChild(deleteButton);
