@@ -76,6 +76,8 @@ function displayBook() {
     const yearCell = document.createElement('td');
     const readCell = document.createElement('td');
     const readButton = document.createElement('button');
+    const starsCell = document.createElement('td');
+    const starsOverlay = document.createElement('div');
 
     titleCell.textContent = book.title;
     authorCell.textContent = book.author;
@@ -90,9 +92,16 @@ function displayBook() {
         readButton.classList.add('not-read-book');
         readButton.textContent = 'Not read'
     }
+    for(let i = 0; i < 5; i++) {
+        const star = document.createElement('img');
+        star.setAttribute('src', 'img/star.svg');
+        starsCell.appendChild(star);
+    }
+    starsOverlay.classList.add('star-overlay');
+    starsCell.appendChild(starsOverlay);
     
+    tr.append(titleCell, authorCell, pagesCell, yearCell, readCell, starsCell);
     readCell.appendChild(readButton);
-    tr.append(titleCell, authorCell, pagesCell, yearCell, readCell);
     })
     tbody.appendChild(tr);
 

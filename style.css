@@ -91,6 +91,7 @@ td:last-child {
 }
 
 td:nth-child(6) {
+    position: relative;
     white-space: nowrap;
 }
 
