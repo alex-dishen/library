@@ -1,4 +1,5 @@
 const addBookBtn = document.querySelector('.add-book');
+const tbody = document.querySelector('.tbody');
 const overlay = document.querySelector('.overlay');
 const modal = document.querySelector('.modal');
 const checkBox = document.getElementById('checkbox');
@@ -6,10 +7,7 @@ const ratingOption = document.querySelector('.rating');
 const rateValue = document.getElementById('rate-value');
 const starContainer = document.querySelector('.stars');
 const starOverlay = document.querySelector('.star-overlay')
-
 const submitBtn = document.querySelector('.submit-btn');
-const tbody = document.querySelector('.tbody');
-
 let myLibrary = [];
 
 function showBookForm() {
@@ -66,6 +64,58 @@ function getUserInput() {
     myLibrary.push(book);
 }
 
+function createBookStatusBtn(tr) {
+    const readCell = document.createElement('td');
+    const readButton = document.createElement('button');
+
+    if(checkBox.checked) {
+        readButton.classList.add('book');
+        readButton.classList.add('read-book');
+        readButton.textContent = 'Read';
+    } else if(!checkBox.checked) {
+        readButton.classList.add('book');
+        readButton.classList.add('not-read-book');
+        readButton.textContent = 'Not read'
+    }
+
+    readCell.appendChild(readButton);
+    tr.appendChild(readCell);
+}
+
+function createStars(tr) {
+    const starsCell = document.createElement('td');
+    const starsContainer = document.createElement('div');
+    const starsOverlay = document.createElement('div');
+    const percentage = Math.round((rateValue.value / 5) * 100);
+
+    if(checkBox.checked) {
+        for(let i = 0; i < 5; i++) {
+            const star = document.createElement('img');
+            star.setAttribute('src', 'img/star.svg');
+            starsContainer.appendChild(star);
+        }
+    }
+
+    starsOverlay.style.width = `${100 - percentage}%`;
+    starsOverlay.classList.add('star-overlay');
+    starsContainer.classList.add('stars-container');
+
+    starsContainer.appendChild(starsOverlay);
+    starsCell.appendChild(starsContainer);
+    tr.appendChild(starsCell);
+}
+
+function createDeleteBtn(tr) {
+    const deleteCell = document.createElement('td');
+    const deleteButton = document.createElement('button');
+
+    deleteButton.classList.add('delete-btn');
+    deleteButton.textContent = 'Delete';
+    deleteCell.appendChild(deleteButton);
+
+    tr.appendChild(deleteCell);
+}
+
 function displayBook() {
     getUserInput();
     const tr = document.createElement('tr');
@@ -74,42 +124,17 @@ function displayBook() {
     const authorCell = document.createElement('td');
     const pagesCell = document.createElement('td');
     const yearCell = document.createElement('td');
-    const readCell = document.createElement('td');
-    const readButton = document.createElement('button');
-    const starsCell = document.createElement('td');
-    const starsContainer = document.createElement('div');
-    const starsOverlay = document.createElement('div');
-    const deleteCell = document.createElement('td');
-    const deleteButton = document.createElement('button');
 
+    titleCell.textContent = book.title;
     authorCell.textContent = book.author;
     pagesCell.textContent = book.pages;
     yearCell.textContent = book.year;
-    if(checkBox.checked === true) {
-        readButton.classList.add('book');
-        readButton.classList.add('read-book');
-        readButton.textContent = 'Read';
-    } else if(checkBox.checked === false) {
-        readButton.classList.add('book');
-        readButton.classList.add('not-read-book');
-        readButton.textContent = 'Not read'
-    }
-    starsContainer.classList.add('stars-container')
-    starsCell.appendChild(starsContainer);
-    for(let i = 0; i < 5; i++) {
-        const star = document.createElement('img');
-        star.setAttribute('src', 'img/star.svg');
-        starsContainer.appendChild(star);
-    }
-    starsOverlay.classList.add('star-overlay');
-    starContainer.appendChild(starOverlay)
-    deleteButton.classList.add('delete-btn');
-    deleteButton.textContent = 'Delete';
-    deleteCell.appendChild(deleteButton);
     
-    tr.append(titleCell, authorCell, pagesCell, yearCell, 
-              readCell, starsCell, deleteCell);
-    readCell.appendChild(readButton);
+    tr.append(titleCell, authorCell, pagesCell, yearCell);
+
+    createBookStatusBtn(tr);
+    createStars(tr);
+    createDeleteBtn(tr);
     })
     tbody.appendChild(tr);
 
@@ -119,12 +144,12 @@ function displayBook() {
     });
 }
 
-submitBtn.addEventListener('click', displayBook);
-
 addBookBtn.addEventListener('click', showBookForm);
+
+checkBox.addEventListener('click', showRatingOption);
 
 rateValue.addEventListener('change', () => {
     rating(rateValue.value);
 });
 
-checkBox.addEventListener('click', showRatingOption);
+submitBtn.addEventListener('click', displayBook);
