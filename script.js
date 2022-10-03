@@ -46,12 +46,11 @@ function rating(value) {
     starOverlay.style.width = `${100 - percentage}%`;
 }
 
-function Book(title, author, pages, year, read) {
+function Book(title, author, pages, year) {
     this.title = title;
     this.author = author;
     this.pages = pages;
     this.year = year;
-    this.read = read;
 }
 
 function getUserInput() {
@@ -117,9 +116,12 @@ function createDeleteBtn(tr) {
 }
 
 function displayBook() {
-    getUserInput();
-    const tr = document.createElement('tr');
+    submitBtn.addEventListener('click', getUserInput);
+    document.querySelectorAll('.book-row').forEach((book) => book.remove());
+
     myLibrary.forEach((book) => {
+    const tr = document.createElement('tr');
+    tr.classList.add('book-row');
     const titleCell = document.createElement('td');
     const authorCell = document.createElement('td');
     const pagesCell = document.createElement('td');
@@ -131,18 +133,24 @@ function displayBook() {
     yearCell.textContent = book.year;
     
     tr.append(titleCell, authorCell, pagesCell, yearCell);
-
     createBookStatusBtn(tr);
     createStars(tr);
     createDeleteBtn(tr);
-    })
     tbody.appendChild(tr);
+    })
 
     const books = document.querySelectorAll('.book');
     books.forEach((book) => {
         book.addEventListener('click', () => {changeBookStatus(book)})
     });
 }
+
+const programmer = new Book('Think like a programmer', 'V. Anton Spraul', 256, 2012);
+const fight = new Book('Fight Club', 'Chuck Palaniuk', 224, 1996);
+const elon = new Book('Elon Musk', 'Ashlee Vance', 416, 2017);
+myLibrary.push(programmer, fight, elon);
+displayBook();
+
 
 addBookBtn.addEventListener('click', showBookForm);
 
