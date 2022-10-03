@@ -65,10 +65,6 @@ table {
     box-shadow:  0px 5px 15px rgb(0, 0, 0, 0.16), -0px -5px 30px rgb(0, 0, 0, 0.16);
 }
 
-tr:last-child td{
-    border: none;
-}
-
 th:first-child, 
 td:first-child {
     padding-left: 30px;
@@ -85,7 +81,7 @@ th {
     padding: 28px 8px 0 8px;
 }
 
-img {
+img[src*='triangle'] {
     height: 12px;
     cursor: pointer;
 }
@@ -94,9 +90,17 @@ td:last-child {
     padding-right: 30px;
 }
 
+td:nth-child(6) {
+    white-space: nowrap;
+}
+
 td {
     padding: 20px 8px 20px 8px;
     border-bottom: 1px solid var(--grey);
+}
+
+tr:last-child td{
+    border: none;
 }
 
 .read-book, 
@@ -118,6 +122,10 @@ form button {
 .not-read-book {
     background-color: rgb(231, 240, 254);
     color: rgb(117, 144, 224);
+}
+
+img[src*='star'] {
+    height: 20px;
 }
 
 .delete-btn {
@@ -262,13 +270,9 @@ input[type='checkbox'] {
 }
 
 
-form button {
+.submit-btn {
     background-color: rgb(181, 253, 166);
     font-size: var(--font-18px);
     width: 100%;
     padding: 13px;
 }
-
-/* MEDIA QUERIES */
-
-@media (max-width: 0px) {}

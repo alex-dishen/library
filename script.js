@@ -1,4 +1,3 @@
-const books = document.querySelectorAll('.book');
 const addBookBtn = document.querySelector('.add-book');
 const overlay = document.querySelector('.overlay');
 const modal = document.querySelector('.modal');
@@ -7,6 +6,11 @@ const ratingOption = document.querySelector('.rating');
 const rateValue = document.getElementById('rate-value');
 const starContainer = document.querySelector('.stars');
 const starOverlay = document.querySelector('.star-overlay')
+
+const submitBtn = document.querySelector('.submit-btn');
+const tbody = document.querySelector('.tbody');
+
+let myLibrary = [];
 
 function showBookForm() {
     overlay.style.display = 'block';
@@ -44,14 +48,66 @@ function rating(value) {
     starOverlay.style.width = `${100 - percentage}%`;
 }
 
-books.forEach((book) => {
-    book.addEventListener('click', () => {changeBookStatus(book)})
- });
+function Book(title, author, pages, year, read) {
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
+    this.year = year;
+    this.read = read;
+}
 
- addBookBtn.addEventListener('click', showBookForm);
+function getUserInput() {
+    const title = document.querySelector('.title').value;
+    const author = document.querySelector('.author').value;
+    const pages = document.querySelector('.pages').value;
+    const year = document.querySelector('.year').value;
 
- rateValue.addEventListener('change', () => {
+    const book = new Book(title, author, pages, year);
+    myLibrary.push(book);
+}
+
+function displayBook() {
+    getUserInput();
+    const tr = document.createElement('tr');
+    myLibrary.forEach((book) => {
+    const titleCell = document.createElement('td');
+    const authorCell = document.createElement('td');
+    const pagesCell = document.createElement('td');
+    const yearCell = document.createElement('td');
+    const readCell = document.createElement('td');
+    const readButton = document.createElement('button');
+
+    titleCell.textContent = book.title;
+    authorCell.textContent = book.author;
+    pagesCell.textContent = book.pages;
+    yearCell.textContent = book.year;
+    if(checkBox.checked === true) {
+        readButton.classList.add('book');
+        readButton.classList.add('read-book');
+        readButton.textContent = 'Read';
+    } else if(checkBox.checked === false) {
+        readButton.classList.add('book');
+        readButton.classList.add('not-read-book');
+        readButton.textContent = 'Not read'
+    }
+    
+    readCell.appendChild(readButton);
+    tr.append(titleCell, authorCell, pagesCell, yearCell, readCell);
+    })
+    tbody.appendChild(tr);
+
+    const books = document.querySelectorAll('.book');
+    books.forEach((book) => {
+        book.addEventListener('click', () => {changeBookStatus(book)})
+    });
+}
+
+submitBtn.addEventListener('click', displayBook);
+
+addBookBtn.addEventListener('click', showBookForm);
+
+rateValue.addEventListener('change', () => {
     rating(rateValue.value);
- });
+});
 
- checkBox.addEventListener('click', showRatingOption);
+checkBox.addEventListener('click', showRatingOption);
