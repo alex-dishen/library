@@ -78,8 +78,9 @@ function displayBook() {
     const readButton = document.createElement('button');
     const starsCell = document.createElement('td');
     const starsOverlay = document.createElement('div');
+    const deleteCell = document.createElement('td');
+    const deleteButton = document.createElement('button');
 
-    titleCell.textContent = book.title;
     authorCell.textContent = book.author;
     pagesCell.textContent = book.pages;
     yearCell.textContent = book.year;
@@ -99,8 +100,12 @@ function displayBook() {
     }
     starsOverlay.classList.add('star-overlay');
     starsCell.appendChild(starsOverlay);
+    deleteButton.classList.add('delete-btn');
+    deleteButton.textContent = 'Delete';
+    deleteCell.appendChild(deleteButton);
     
-    tr.append(titleCell, authorCell, pagesCell, yearCell, readCell, starsCell);
+    tr.append(titleCell, authorCell, pagesCell, yearCell, 
+              readCell, starsCell, deleteCell);
     readCell.appendChild(readButton);
     })
     tbody.appendChild(tr);
