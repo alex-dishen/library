@@ -8,6 +8,10 @@ const rateValue = document.getElementById('rate-value');
 const starContainer = document.querySelector('.stars');
 const starOverlay = document.querySelector('.star-overlay')
 const submitBtn = document.querySelector('.submit-btn');
+const inputTitle = document.querySelector('.title');
+const inputAuthor = document.querySelector('.author');
+const inputPages = document.querySelector('.pages');
+const inputYear = document.querySelector('.year');
 let myLibrary = [];
 let index = 0;
 
@@ -19,7 +23,15 @@ function showBookForm() {
 
 function removeBookForm() {
     overlay.style.display = 'none';
-    modal.classList.remove('active')
+    modal.classList.remove('active');
+    inputTitle.value = '';
+    inputAuthor.value = '';
+    inputPages.value = '';
+    inputYear.value = '';
+    checkBox.checked = false;
+    showRatingOption();
+    starOverlay.style.width = '32%'
+    rateValue.value = 3.4;
 }
 
 function changeBookStatus(book) {
@@ -59,10 +71,10 @@ function Book(title, author, pages, year, isRead, rateStars) {
 }
 
 function getUserInput() {
-    const title = document.querySelector('.title').value;
-    const author = document.querySelector('.author').value;
-    const pages = document.querySelector('.pages').value;
-    const year = document.querySelector('.year').value;
+    const title = inputTitle.value;
+    const author = inputAuthor.value;
+    const pages = inputPages.value;
+    const year = inputYear.value;
     const isRead = checkBox.checked;
     const stars = rateValue.value;
 
@@ -189,4 +201,7 @@ checkBox.onclick = () => showRatingOption();
 rateValue.addEventListener('change', () => {
     rating(rateValue.value);
 });
-submitBtn.addEventListener('click', displayBook);
+submitBtn.addEventListener('click', () => {
+    removeBookForm();
+    displayBook();
+});
