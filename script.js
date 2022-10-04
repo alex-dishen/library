@@ -9,6 +9,7 @@ const starContainer = document.querySelector('.stars');
 const starOverlay = document.querySelector('.star-overlay')
 const submitBtn = document.querySelector('.submit-btn');
 let myLibrary = [];
+let index = 0;
 
 function showBookForm() {
     overlay.style.display = 'block';
@@ -33,6 +34,8 @@ function changeBookStatus(book) {
     }
 }
 
+//When checkbox of read/not read book is checked, shows option
+//to choose stars for rating
 function showRatingOption() {
     if(checkBox.checked === true) {
         ratingOption.style.display = 'flex';
@@ -112,6 +115,9 @@ function createDeleteBtn(tr) {
     const deleteCell = document.createElement('td');
     const deleteButton = document.createElement('button');
 
+    //The data-index-number attribute is set on button to find Book index in array, 
+    //that will determine what Book object has to be deleted from myLibrary array.
+    deleteButton.setAttribute('data-index-number', `${index++}`);
     deleteButton.classList.add('delete-btn');
     deleteButton.textContent = 'Delete';
     deleteCell.appendChild(deleteButton);
@@ -121,7 +127,14 @@ function createDeleteBtn(tr) {
 
 function displayBook() {
     submitBtn.addEventListener('click', getUserInput);
+    //Deletes every single book and it's details from display NOT FROM myLibrary
     document.querySelectorAll('.book-row').forEach((book) => book.remove());
+    //3 book where created after page load, so right now the index = 2,
+    //when we create another book it's index = 6, because the code creates
+    //3 books that are written in the code + book that user created. As we use
+    //index variable for deleting Book object from array we need this line of
+    //code to start counting from 0
+    index = 0;
 
     myLibrary.forEach((book) => {
     const tr = document.createElement('tr');
@@ -144,8 +157,23 @@ function displayBook() {
     })
 
     const books = document.querySelectorAll('.book');
-    books.forEach((book) => {
-        book.addEventListener('click', () => {changeBookStatus(book)})
+    books.forEach((book) => {book.onclick = () => changeBookStatus(book)});
+
+    deleteBook();
+}
+
+function deleteBook() {
+    const deleteButtons = document.querySelectorAll('.delete-btn');
+
+    deleteButtons.forEach((deleteButton) => {
+        deleteButton.addEventListener('click', () => {
+            //Previously each button was given an index. That index corresponds
+            //with the Book index in the array. Now button index is used to
+            //find Book under the same index and delete it from myLibrary array
+            const buttonIndex = deleteButton.getAttribute('data-index-number');
+            myLibrary.splice(buttonIndex, 1);
+            displayBook();
+        })
     });
 }
 
@@ -153,15 +181,12 @@ const thinkLikeAProgrammer = new Book('Think like a programmer', 'V. Anton Sprau
 const fightClub = new Book('Fight Club', 'Chuck Palaniuk', 224, 1996, true, 4.6);
 const elonMusk = new Book('Elon Musk', 'Ashlee Vance', 416, 2017, false);
 myLibrary.push(thinkLikeAProgrammer, fightClub, elonMusk);
+// displayBook() is called to display books above on page load
 displayBook();
 
-
-addBookBtn.addEventListener('click', showBookForm);
-
-checkBox.addEventListener('click', showRatingOption);
-
+addBookBtn.onclick = () => showBookForm();
+checkBox.onclick = () => showRatingOption();
 rateValue.addEventListener('change', () => {
     rating(rateValue.value);
 });
-
 submitBtn.addEventListener('click', displayBook);
