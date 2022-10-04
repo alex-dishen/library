@@ -46,11 +46,13 @@ function rating(value) {
     starOverlay.style.width = `${100 - percentage}%`;
 }
 
-function Book(title, author, pages, year) {
+function Book(title, author, pages, year, isRead, rateStars) {
     this.title = title;
     this.author = author;
     this.pages = pages;
     this.year = year;
+    this.isRead = isRead;
+    this.rateStars = rateStars
 }
 
 function getUserInput() {
@@ -58,20 +60,22 @@ function getUserInput() {
     const author = document.querySelector('.author').value;
     const pages = document.querySelector('.pages').value;
     const year = document.querySelector('.year').value;
+    const isRead = checkBox.checked;
+    const stars = rateValue.value;
 
-    const book = new Book(title, author, pages, year);
+    const book = new Book(title, author, pages, year, isRead, stars);
     myLibrary.push(book);
 }
 
-function createBookStatusBtn(tr) {
+function createBookStatusBtn(tr, isRead) {
     const readCell = document.createElement('td');
     const readButton = document.createElement('button');
 
-    if(checkBox.checked) {
+    if(isRead) {
         readButton.classList.add('book');
         readButton.classList.add('read-book');
         readButton.textContent = 'Read';
-    } else if(!checkBox.checked) {
+    } else if(!isRead) {
         readButton.classList.add('book');
         readButton.classList.add('not-read-book');
         readButton.textContent = 'Not read'
@@ -81,13 +85,13 @@ function createBookStatusBtn(tr) {
     tr.appendChild(readCell);
 }
 
-function createStars(tr) {
+function createStars(tr, isRead, rateValue) {
     const starsCell = document.createElement('td');
     const starsContainer = document.createElement('div');
     const starsOverlay = document.createElement('div');
-    const percentage = Math.round((rateValue.value / 5) * 100);
+    const percentage = Math.round((rateValue / 5) * 100);
 
-    if(checkBox.checked) {
+    if(isRead) {
         for(let i = 0; i < 5; i++) {
             const star = document.createElement('img');
             star.setAttribute('src', 'img/star.svg');
@@ -133,8 +137,8 @@ function displayBook() {
     yearCell.textContent = book.year;
     
     tr.append(titleCell, authorCell, pagesCell, yearCell);
-    createBookStatusBtn(tr);
-    createStars(tr);
+    createBookStatusBtn(tr, book.isRead);
+    createStars(tr, book.isRead,book.rateStars);
     createDeleteBtn(tr);
     tbody.appendChild(tr);
     })
@@ -145,10 +149,10 @@ function displayBook() {
     });
 }
 
-const programmer = new Book('Think like a programmer', 'V. Anton Spraul', 256, 2012);
-const fight = new Book('Fight Club', 'Chuck Palaniuk', 224, 1996);
-const elon = new Book('Elon Musk', 'Ashlee Vance', 416, 2017);
-myLibrary.push(programmer, fight, elon);
+const thinkLikeAProgrammer = new Book('Think like a programmer', 'V. Anton Spraul', 256, 2012, true, 2.8);
+const fightClub = new Book('Fight Club', 'Chuck Palaniuk', 224, 1996, true, 4.6);
+const elonMusk = new Book('Elon Musk', 'Ashlee Vance', 416, 2017, false);
+myLibrary.push(thinkLikeAProgrammer, fightClub, elonMusk);
 displayBook();
 
 
