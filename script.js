@@ -5,7 +5,6 @@ const modal = document.querySelector('.modal');
 const checkBox = document.getElementById('checkbox');
 const ratingOption = document.querySelector('.rating');
 const rateValue = document.getElementById('rate-value');
-const starContainer = document.querySelector('.stars');
 const starOverlay = document.querySelector('.star-overlay')
 const submitBtn = document.querySelector('.submit-btn');
 const inputTitle = document.querySelector('.title');
@@ -14,6 +13,8 @@ const inputPages = document.querySelector('.pages');
 const inputYear = document.querySelector('.year');
 let myLibrary = [];
 let index = 0;
+let starsIndex = 0;
+let bookStatusIndex = 0;
 
 function showBookForm() {
     overlay.style.display = 'block';
@@ -85,6 +86,7 @@ function getUserInput() {
 function createBookStatusBtn(tr, isRead) {
     const readCell = document.createElement('td');
     const readButton = document.createElement('button');
+    readButton.setAttribute('data-readButton-index', `${bookStatusIndex++}`)
 
     if(isRead) {
         readButton.classList.add('book');
@@ -114,6 +116,7 @@ function createStars(tr, isRead, rateValue) {
         }
     }
 
+    starsContainer.setAttribute('data-star-index', `${starsIndex++}`);
     starsOverlay.style.width = `${100 - percentage}%`;
     starsOverlay.classList.add('star-overlay');
     starsContainer.classList.add('stars-container');
@@ -169,9 +172,28 @@ function displayBook() {
     })
 
     const books = document.querySelectorAll('.book');
-    books.forEach((book) => {book.onclick = () => changeBookStatus(book)});
+    books.forEach((book) => {
+        book.addEventListener('click', () => {
+            changeBookStatus(book);
+            if(book.textContent === 'Not read') {
+                deleteStars(book);
+            }
+        });
+    });
 
     deleteBook();
+}
+
+function deleteStars(book) {
+    const starsContainers = document.querySelectorAll('.stars-container');
+    const readBookBtnIndex = book.getAttribute('data-readButton-index');
+
+    starsContainers.forEach((container) => {
+        const starsContainerIndex = container.getAttribute('data-star-index');
+        if(readBookBtnIndex === starsContainerIndex) {
+                container.replaceChildren();
+        }
+    });
 }
 
 function deleteBook() {
