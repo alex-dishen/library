@@ -148,8 +148,11 @@ function displayBook() {
     //when we create another book it's index = 6, because the code creates
     //3 books that are written in the code + book that user created. As we use
     //index variable for deleting Book object from array we need this line of
-    //code to start counting from 0
+    //code to start counting from 0. The same is applied to starsIndex and 
+    //bookStatusIndex
     index = 0;
+    starsIndex = 0;
+    bookStatusIndex = 0;
 
     myLibrary.forEach((book) => {
     const tr = document.createElement('tr');
@@ -194,6 +197,8 @@ function deleteStars(book) {
                 container.replaceChildren();
         }
     });
+
+    myLibrary[readBookBtnIndex].isRead = false;
 }
 
 function deleteBook() {
