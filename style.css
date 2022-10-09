@@ -35,7 +35,7 @@ header {
     margin: 0 auto;
 }
 
-.add-book {
+.add-book-btn {
     font-size: var(--font-20px);
     font-weight: 500;
     padding: 15px;
@@ -99,8 +99,8 @@ tr:last-child td{
     border: none;
 }
 
-.read-book, 
-.not-read-book, 
+.read-book-btn, 
+.not-read-book-btn, 
 .delete-btn,
 form button {
     font-size: var(--font-14px);
@@ -110,12 +110,12 @@ form button {
     cursor: pointer;
 }
 
-.read-book {
+.read-book-btn {
     background-color: rgb(216, 243, 232);
     color: rgb(92, 179, 141);
 }
 
-.not-read-book {
+.not-read-book-btn {
     background-color: rgb(231, 240, 254);
     color: rgb(117, 144, 224);
 }
@@ -225,7 +225,7 @@ input,
     cursor: default;
 }
 
-.star-overlay {
+.stars-overlay {
     position: absolute;
     z-index: 1;
     background-color: black;

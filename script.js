@@ -1,11 +1,11 @@
-const addBookBtn = document.querySelector('.add-book');
+const addBookBtn = document.querySelector('.add-book-btn');
 const tbody = document.querySelector('.tbody');
 const overlay = document.querySelector('.overlay');
 const modal = document.querySelector('.modal');
 const checkBox = document.getElementById('checkbox');
 const ratingOption = document.querySelector('.rating');
 const rateValue = document.getElementById('rate-value');
-const starOverlay = document.querySelector('.star-overlay')
+const starOverlay = document.querySelector('.stars-overlay')
 const submitBtn = document.querySelector('.submit-btn');
 const inputTitle = document.querySelector('.title');
 const inputAuthor = document.querySelector('.author');
@@ -36,13 +36,13 @@ function removeBookForm() {
 }
 
 function changeBookStatus(book) {
-    if(book.getAttribute('class') === 'book read-book') {
-        book.classList.remove('read-book');
-        book.classList.add('not-read-book');
+    if(book.getAttribute('class') === 'book read-book-btn') {
+        book.classList.remove('read-book-btn');
+        book.classList.add('not-read-book-btn');
         book.textContent = 'Not read';
-    } else if (book.getAttribute('class') === 'book not-read-book') {
-        book.classList.remove('not-read-book');
-        book.classList.add('read-book');
+    } else if (book.getAttribute('class') === 'book not-read-book-btn') {
+        book.classList.remove('not-read-book-btn');
+        book.classList.add('read-book-btn');
         book.textContent = 'Read';
     }
 }
@@ -90,11 +90,11 @@ function createBookStatusBtn(tr, isRead) {
 
     if(isRead) {
         readButton.classList.add('book');
-        readButton.classList.add('read-book');
+        readButton.classList.add('read-book-btn');
         readButton.textContent = 'Read';
     } else if(!isRead) {
         readButton.classList.add('book');
-        readButton.classList.add('not-read-book');
+        readButton.classList.add('not-read-book-btn');
         readButton.textContent = 'Not read'
     }
 
@@ -118,7 +118,7 @@ function createStars(tr, isRead, rateValue) {
 
     starsContainer.setAttribute('data-star-index', `${starsIndex++}`);
     starsOverlay.style.width = `${100 - percentage}%`;
-    starsOverlay.classList.add('star-overlay');
+    starsOverlay.classList.add('stars-overlay');
     starsContainer.classList.add('stars-container');
 
     starsContainer.appendChild(starsOverlay);
