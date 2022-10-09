@@ -57,9 +57,9 @@ function showRatingOption() {
     }
 }
 
-function rating(value) {
+function overlayStars(element, value) {
     const percentage = Math.round((value / 5) * 100);
-    starOverlay.style.width = `${100 - percentage}%`;
+    element.style.width = `${100 - percentage}%`;
 }
 
 function Book(title, author, pages, year, isRead, rateStars) {
@@ -81,6 +81,56 @@ function getUserInput() {
 
     const book = new Book(title, author, pages, year, isRead, stars);
     myLibrary.push(book);
+}
+
+function setAttributes(element, attributes) {
+    Object.keys(attributes).forEach(attr => {
+        element.setAttribute(attr, attributes[attr]);
+    });
+}
+
+function createPopupRating(parent) {
+    const rating = document.createElement('div');
+    const starsContainer = document.createElement('div');
+    const starsOverlay = document.createElement('div');
+    const rateOptions = document.createElement('div');
+    const valueLabel = document.createElement('label');
+    const input = document.createElement('input');
+    const maxValueLabel = document.createElement('label');
+    const maxValue = document.createElement('div');
+    for(let i = 0; i < 5; i++) {
+        const star = document.createElement('img');
+        star.setAttribute('src', 'img/star.svg');
+        starsContainer.appendChild(star);
+    }
+    const attributes = {
+        type: 'number',
+        id: 'popup-rate-value',
+        value: '3.4',
+        step: '0.1',
+        min: '0.1',
+        max: '5',
+    }
+
+    rating.classList.add('popup-rating');
+    starsContainer.classList.add('popup-stars');
+    starsOverlay.classList.add('popup-stars-overlay');
+    rateOptions.classList.add('popup-rate-options');
+    valueLabel.setAttribute('for', 'popup-rate-value');
+    valueLabel.textContent = 'Value';
+    setAttributes(input, attributes);
+    maxValueLabel.textContent = 'Max';
+    maxValue.classList.add('pop-up-max-value');
+    maxValue.textContent = '5';
+
+    starsContainer.appendChild(starsOverlay);
+    rateOptions.append(valueLabel, input, maxValueLabel, maxValue);
+    rating.append(starsContainer, rateOptions);
+    parent.appendChild(rating);
+
+    input.addEventListener('change', () => {
+        overlayStars(starsOverlay, input.value);
+    });
 }
 
 function createBookStatusBtn(tr, isRead) {
@@ -106,7 +156,6 @@ function createStars(tr, isRead, rateValue) {
     const starsCell = document.createElement('td');
     const starsContainer = document.createElement('div');
     const starsOverlay = document.createElement('div');
-    const percentage = Math.round((rateValue / 5) * 100);
 
     if(isRead) {
         for(let i = 0; i < 5; i++) {
@@ -116,13 +165,14 @@ function createStars(tr, isRead, rateValue) {
         }
     }
 
+    overlayStars(starsOverlay, rateValue);
     starsContainer.setAttribute('data-star-index', `${starsIndex++}`);
-    starsOverlay.style.width = `${100 - percentage}%`;
     starsOverlay.classList.add('stars-overlay');
     starsContainer.classList.add('stars-container');
 
     starsContainer.appendChild(starsOverlay);
     starsCell.appendChild(starsContainer);
+    createPopupRating(starsCell)
     tr.appendChild(starsCell);
 }
 
@@ -226,7 +276,7 @@ displayBook();
 addBookBtn.onclick = () => showBookForm();
 checkBox.onclick = () => showRatingOption();
 rateValue.addEventListener('change', () => {
-    rating(rateValue.value);
+    overlayStars(starOverlay, rateValue.value);
 });
 submitBtn.addEventListener('click', () => {
     removeBookForm();

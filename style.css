@@ -140,11 +140,13 @@ img[src*='star'] {
 /* popup when a book switched  from not read to read book */
 
 .popup-rating {
-    position: absolute;
+    display: block;
+    position: relative;
     z-index: 1;
     background-color: var(--white);
     color: rgb(92, 179, 141);
     width: 200px;
+    bottom: 60px;
     padding: 15px;
     border-radius: 8px;
     box-shadow:  0px 5px 15px rgb(0, 0, 0, 0.16), -0px -5px 30px rgb(0, 0, 0, 0.16);
@@ -176,7 +178,7 @@ img[src*='star'] {
 
 #popup-rate-value {
     height: 40px;
-    width: 37px;
+    width: 39px;
     padding: 0;
 }
 
