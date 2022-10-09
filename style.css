@@ -137,6 +137,54 @@ img[src*='star'] {
     color: rgb(190, 97, 113);
 }
 
+/* popup when a book switched  from not read to read book */
+
+.popup-rating {
+    position: absolute;
+    z-index: 1;
+    background-color: var(--white);
+    color: rgb(92, 179, 141);
+    width: 200px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow:  0px 5px 15px rgb(0, 0, 0, 0.16), -0px -5px 30px rgb(0, 0, 0, 0.16);
+}
+
+.popup-rating:before {
+    position: absolute;
+    content: "";
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid var(--white);
+    border-bottom: 10px solid transparent;
+    right: 50%;
+    bottom: -20px;
+}
+
+.popup-stars {
+    position: relative;
+    width: 132px;
+    margin: 0 auto;
+}
+
+.popup-rate-options {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    font-size: 16px;
+}
+
+#popup-rate-value {
+    height: 40px;
+    width: 37px;
+    padding: 0;
+}
+
+.pop-up-max-value {
+    color: black;
+    font-weight: 500;;
+}
+
 /* FOOTER */
 
 footer {
@@ -225,7 +273,7 @@ input,
     cursor: default;
 }
 
-.stars-overlay {
+.stars-overlay, .popup-stars-overlay {
     position: absolute;
     z-index: 1;
     background-color: black;
