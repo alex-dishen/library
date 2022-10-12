@@ -165,14 +165,14 @@ function createStars(tr, isRead, rateValue) {
         }
     }
 
+    starsCell.classList.add('stars-cell')
     overlayStars(starsOverlay, rateValue);
-    starsContainer.setAttribute('data-star-index', `${starsIndex++}`);
+    starsCell.setAttribute('data-star-index', `${starsIndex++}`);
     starsOverlay.classList.add('stars-overlay');
     starsContainer.classList.add('stars-container');
 
     starsContainer.appendChild(starsOverlay);
     starsCell.appendChild(starsContainer);
-    createPopupRating(starsCell)
     tr.appendChild(starsCell);
 }
 
@@ -188,6 +188,20 @@ function createDeleteBtn(tr) {
     deleteCell.appendChild(deleteButton);
 
     tr.appendChild(deleteCell);
+}
+
+function showUpRatingStars(book) {
+    const starsCells = document.querySelectorAll('.stars-cell');
+    const readBookBtnIndex = book.getAttribute('data-readButton-index');
+
+    starsCells.forEach((cell) => {
+        const starsContainerIndex = cell.getAttribute('data-star-index');
+        if(readBookBtnIndex === starsContainerIndex) {
+                createPopupRating(cell)
+        }
+    });
+
+    myLibrary[readBookBtnIndex].isRead = true;
 }
 
 function displayBook() {
@@ -228,8 +242,13 @@ function displayBook() {
     books.forEach((book) => {
         book.addEventListener('click', () => {
             changeBookStatus(book);
+
             if(book.textContent === 'Not read') {
                 deleteStars(book);
+            }
+            
+            if(book.textContent === 'Read') {
+                showUpRatingStars(book);
             }
         });
     });
@@ -237,14 +256,15 @@ function displayBook() {
     deleteBook();
 }
 
+
 function deleteStars(book) {
-    const starsContainers = document.querySelectorAll('.stars-container');
+    const starsCells = document.querySelectorAll('.stars-cell');
     const readBookBtnIndex = book.getAttribute('data-readButton-index');
 
-    starsContainers.forEach((container) => {
-        const starsContainerIndex = container.getAttribute('data-star-index');
+    starsCells.forEach((cell) => {
+        const starsContainerIndex = cell.getAttribute('data-star-index');
         if(readBookBtnIndex === starsContainerIndex) {
-                container.replaceChildren();
+                cell.replaceChildren();
         }
     });
 
