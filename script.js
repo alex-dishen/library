@@ -35,18 +35,6 @@ function removeBookForm() {
     rateValue.value = 3.4;
 }
 
-function changeBookStatus(book) {
-    if(book.getAttribute('class') === 'book read-book-btn') {
-        book.classList.remove('read-book-btn');
-        book.classList.add('not-read-book-btn');
-        book.textContent = 'Not read';
-    } else if (book.getAttribute('class') === 'book not-read-book-btn') {
-        book.classList.remove('not-read-book-btn');
-        book.classList.add('read-book-btn');
-        book.textContent = 'Read';
-    }
-}
-
 //When checkbox of read/not read book is checked, shows option
 //to choose stars for rating
 function showRatingOption() {
@@ -81,56 +69,6 @@ function getUserInput() {
 
     const book = new Book(title, author, pages, year, isRead, stars);
     myLibrary.push(book);
-}
-
-function setAttributes(element, attributes) {
-    Object.keys(attributes).forEach(attr => {
-        element.setAttribute(attr, attributes[attr]);
-    });
-}
-
-function createPopupRating(parent) {
-    const rating = document.createElement('div');
-    const starsContainer = document.createElement('div');
-    const starsOverlay = document.createElement('div');
-    const rateOptions = document.createElement('div');
-    const valueLabel = document.createElement('label');
-    const input = document.createElement('input');
-    const maxValueLabel = document.createElement('label');
-    const maxValue = document.createElement('div');
-    for(let i = 0; i < 5; i++) {
-        const star = document.createElement('img');
-        star.setAttribute('src', 'img/star.svg');
-        starsContainer.appendChild(star);
-    }
-    const attributes = {
-        type: 'number',
-        id: 'popup-rate-value',
-        value: '3.4',
-        step: '0.1',
-        min: '0.1',
-        max: '5',
-    }
-
-    rating.classList.add('popup-rating');
-    starsContainer.classList.add('popup-stars');
-    starsOverlay.classList.add('popup-stars-overlay');
-    rateOptions.classList.add('popup-rate-options');
-    valueLabel.setAttribute('for', 'popup-rate-value');
-    valueLabel.textContent = 'Value';
-    setAttributes(input, attributes);
-    maxValueLabel.textContent = 'Max';
-    maxValue.classList.add('pop-up-max-value');
-    maxValue.textContent = '5';
-
-    starsContainer.appendChild(starsOverlay);
-    rateOptions.append(valueLabel, input, maxValueLabel, maxValue);
-    rating.append(starsContainer, rateOptions);
-    parent.appendChild(rating);
-
-    input.addEventListener('change', () => {
-        overlayStars(starsOverlay, input.value);
-    });
 }
 
 function createBookStatusBtn(tr, isRead) {
@@ -176,6 +114,20 @@ function createStars(tr, isRead, rateValue) {
     tr.appendChild(starsCell);
 }
 
+function deleteStars(statusBtn) {
+    const starsCells = document.querySelectorAll('.stars-cell');
+    const readBookBtnIndex = statusBtn.getAttribute('data-readButton-index');
+
+    starsCells.forEach((cell) => {
+        const starsContainerIndex = cell.getAttribute('data-star-index');
+        if(readBookBtnIndex === starsContainerIndex) {
+                cell.replaceChildren();
+        }
+    });
+
+    myLibrary[readBookBtnIndex].isRead = false;
+}
+
 function createDeleteBtn(tr) {
     const deleteCell = document.createElement('td');
     const deleteButton = document.createElement('button');
@@ -190,9 +142,74 @@ function createDeleteBtn(tr) {
     tr.appendChild(deleteCell);
 }
 
-function showUpRatingStars(book) {
+function changeBookStatus(statusBtn) {
+    if(statusBtn.getAttribute('class') === 'book read-book-btn') {
+        statusBtn.classList.remove('read-book-btn');
+        statusBtn.classList.add('not-read-book-btn');
+        statusBtn.textContent = 'Not read';
+    } else if (statusBtn.getAttribute('class') === 'book not-read-book-btn') {
+        statusBtn.classList.remove('not-read-book-btn');
+        statusBtn.classList.add('read-book-btn');
+        statusBtn.textContent = 'Read';
+    }
+}
+
+function setAttributes(element, attributes) {
+    Object.keys(attributes).forEach(attr => {
+        element.setAttribute(attr, attributes[attr]);
+    });
+}
+
+function createPopupRating(parent) {
+    const rating = document.createElement('div');
+    const starsContainer = document.createElement('div');
+    const starsOverlay = document.createElement('div');
+    const rateOptions = document.createElement('div');
+    const valueLabel = document.createElement('label');
+    const input = document.createElement('input');
+    const maxValueLabel = document.createElement('label');
+    const maxValue = document.createElement('div');
+    const addStarsBtn = document.createElement('button');
+    for(let i = 0; i < 5; i++) {
+        const star = document.createElement('img');
+        star.setAttribute('src', 'img/star.svg');
+        starsContainer.appendChild(star);
+    }
+    const attributes = {
+        type: 'number',
+        id: 'popup-rate-value',
+        value: '3.4',
+        step: '0.1',
+        min: '0.1',
+        max: '5',
+    }
+
+    rating.classList.add('popup-rating');
+    starsContainer.classList.add('popup-stars');
+    starsOverlay.classList.add('popup-stars-overlay');
+    rateOptions.classList.add('popup-rate-options');
+    valueLabel.setAttribute('for', 'popup-rate-value');
+    valueLabel.textContent = 'Value';
+    setAttributes(input, attributes);
+    maxValueLabel.textContent = 'Max';
+    maxValue.classList.add('pop-up-max-value');
+    maxValue.textContent = '5';
+    addStarsBtn.classList.add('add-stars-btn');
+    addStarsBtn.textContent = 'Add';
+
+    starsContainer.appendChild(starsOverlay);
+    rateOptions.append(valueLabel, input, maxValueLabel, maxValue);
+    rating.append(starsContainer, rateOptions, addStarsBtn);
+    parent.appendChild(rating);
+
+    input.addEventListener('change', () => {
+        overlayStars(starsOverlay, input.value);
+    });
+}
+
+function showUpRatingStars(statusBtn) {
     const starsCells = document.querySelectorAll('.stars-cell');
-    const readBookBtnIndex = book.getAttribute('data-readButton-index');
+    const readBookBtnIndex = statusBtn.getAttribute('data-readButton-index');
 
     starsCells.forEach((cell) => {
         const starsContainerIndex = cell.getAttribute('data-star-index');
@@ -219,56 +236,41 @@ function displayBook() {
     bookStatusIndex = 0;
 
     myLibrary.forEach((book) => {
-    const tr = document.createElement('tr');
-    tr.classList.add('book-row');
-    const titleCell = document.createElement('td');
-    const authorCell = document.createElement('td');
-    const pagesCell = document.createElement('td');
-    const yearCell = document.createElement('td');
+        const tr = document.createElement('tr');
+        tr.classList.add('book-row');
+        const titleCell = document.createElement('td');
+        const authorCell = document.createElement('td');
+        const pagesCell = document.createElement('td');
+        const yearCell = document.createElement('td');
 
-    titleCell.textContent = book.title;
-    authorCell.textContent = book.author;
-    pagesCell.textContent = book.pages;
-    yearCell.textContent = book.year;
+        titleCell.textContent = book.title;
+        authorCell.textContent = book.author;
+        pagesCell.textContent = book.pages;
+        yearCell.textContent = book.year;
     
-    tr.append(titleCell, authorCell, pagesCell, yearCell);
-    createBookStatusBtn(tr, book.isRead);
-    createStars(tr, book.isRead,book.rateStars);
-    createDeleteBtn(tr);
-    tbody.appendChild(tr);
+        tr.append(titleCell, authorCell, pagesCell, yearCell);
+        createBookStatusBtn(tr, book.isRead);
+        createStars(tr, book.isRead,book.rateStars);
+        createDeleteBtn(tr);
+        tbody.appendChild(tr);
     })
 
-    const books = document.querySelectorAll('.book');
-    books.forEach((book) => {
-        book.addEventListener('click', () => {
-            changeBookStatus(book);
+    const bookStatusBtns = document.querySelectorAll('.book');
+    bookStatusBtns.forEach((statusBtn) => {
+        statusBtn.addEventListener('click', () => {
+            changeBookStatus(statusBtn);
 
-            if(book.textContent === 'Not read') {
-                deleteStars(book);
+            if(statusBtn.textContent === 'Not read') {
+                deleteStars(statusBtn);
             }
             
-            if(book.textContent === 'Read') {
-                showUpRatingStars(book);
+            if(statusBtn.textContent === 'Read') {
+                showUpRatingStars(statusBtn);
             }
         });
     });
 
     deleteBook();
-}
-
-
-function deleteStars(book) {
-    const starsCells = document.querySelectorAll('.stars-cell');
-    const readBookBtnIndex = book.getAttribute('data-readButton-index');
-
-    starsCells.forEach((cell) => {
-        const starsContainerIndex = cell.getAttribute('data-star-index');
-        if(readBookBtnIndex === starsContainerIndex) {
-                cell.replaceChildren();
-        }
-    });
-
-    myLibrary[readBookBtnIndex].isRead = false;
 }
 
 function deleteBook() {

@@ -102,7 +102,8 @@ tr:last-child td{
 .read-book-btn, 
 .not-read-book-btn, 
 .delete-btn,
-form button {
+form button,
+.add-stars-btn {
     font-size: var(--font-14px);
     padding: 5px 12px;
     border: none;
@@ -115,7 +116,7 @@ form button {
     color: rgb(92, 179, 141);
 }
 
-.not-read-book-btn {
+.not-read-book-btn, .add-stars-btn {
     background-color: rgb(231, 240, 254);
     color: rgb(117, 144, 224);
 }
@@ -140,11 +141,13 @@ img[src*='star'] {
 /* popup when a book switched  from not read to read book */
 
 .popup-rating {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
     position: relative;
-    z-index: 1;
+    z-index: 2;
     background-color: var(--white);
-    color: rgb(92, 179, 141);
+    color: rgb(117, 144, 224);
     width: 200px;
     bottom: 60px;
     padding: 15px;
@@ -159,7 +162,7 @@ img[src*='star'] {
     border-right: 10px solid transparent;
     border-top: 10px solid var(--white);
     border-bottom: 10px solid transparent;
-    right: 50%;
+    right: 45%;
     bottom: -20px;
 }
 
@@ -185,6 +188,11 @@ img[src*='star'] {
 .pop-up-max-value {
     color: black;
     font-weight: 500;;
+}
+
+.add-stars-btn {
+    font-size: var(--font-18px);
+    /* margin-top: 5px; */
 }
 
 /* FOOTER */
