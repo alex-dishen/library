@@ -225,6 +225,11 @@ function showPopupRating(cell, readBookBtnIndex) {
     myLibrary[readBookBtnIndex].isRead = true;
 }
 
+function removePopupRating(cell) {
+    const popupRating = document.querySelector('.popup-rating');
+    cell.removeChild(popupRating);
+}
+
 function addStarsAfterPopup(cell) {
     const addStarsBtn = document.querySelector('.add-stars-btn');
 
@@ -245,6 +250,8 @@ function addStarsAfterPopup(cell) {
             
         starsContainer.appendChild(starsOverlay);
         cell.appendChild(starsContainer);
+
+        removePopupRating(cell);
     });
 }
 
