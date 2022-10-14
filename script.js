@@ -96,6 +96,8 @@ function createTableCells() {
 function createBookStatusBtn(tr, isRead) {
     const readCell = document.createElement('td');
     const readButton = document.createElement('button');
+    // The data-readButton-index is set to help in future to determine what cell
+    //has to be changed
     readButton.setAttribute('data-readButton-index', `${bookStatusIndex++}`)
 
     if(isRead) {
@@ -117,7 +119,7 @@ function createStars(tr, isRead, rateValue) {
     const starsContainer = document.createElement('div');
     const starsOverlay = document.createElement('div');
 
-    if(isRead) {
+    if(isRead && rateValue) {
         for(let i = 0; i < 5; i++) {
             const star = document.createElement('img');
             star.setAttribute('src', 'img/star.svg');
@@ -145,7 +147,7 @@ function createDeleteBtn(tr) {
     const deleteCell = document.createElement('td');
     const deleteButton = document.createElement('button');
 
-    //The data-index-number attribute is set on button to find Book index in array, 
+    // The data-index-number attribute is set on button to find Book index in array, 
     //that will determine what Book object has to be deleted from myLibrary array.
     deleteButton.setAttribute('data-index-number', `${index++}`);
     deleteButton.classList.add('delete-btn');
@@ -230,7 +232,18 @@ function removePopupRating(cell) {
     cell.removeChild(popupRating);
 }
 
-function addStarsAfterPopup(cell) {
+function removePopupRatingWhenClickedOutside(cell) { 
+    document.addEventListener('mouseup', (event) => {
+        const popupRating = document.querySelector('.popup-rating');
+        if(popupRating) {
+            if(!popupRating.contains(event.target)) {
+                removePopupRating(cell);
+            }
+        }
+    });
+}
+
+function addStarsAfterPopup(cell, readBookBtnIndex) {
     const addStarsBtn = document.querySelector('.add-stars-btn');
 
     addStarsBtn.addEventListener('click', () => {
@@ -250,6 +263,7 @@ function addStarsAfterPopup(cell) {
             
         starsContainer.appendChild(starsOverlay);
         cell.appendChild(starsContainer);
+        myLibrary[readBookBtnIndex].rateStars = rateValue;
 
         removePopupRating(cell);
     });
@@ -276,7 +290,8 @@ function manageBooksWithStatusBtn() {
                     }
                     if(statusBtn.textContent === 'Read') {
                         showPopupRating(cell, readBookBtnIndex);
-                        addStarsAfterPopup(cell);
+                        removePopupRatingWhenClickedOutside(cell);
+                        addStarsAfterPopup(cell, readBookBtnIndex);
                     }
                 }
             });
