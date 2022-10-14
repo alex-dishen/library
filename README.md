@@ -2,7 +2,7 @@
 
 Library is created with HTML, CSS, JavaScript.
 
-<!-- ![Preview](img/) -->
+![Preview](img/library.png)
 
 ## Links
 - [Live App](https://alex-dishen.github.io/library/) :point_left:
