@@ -15,6 +15,7 @@ let myLibrary = [];
 let index = 0;
 let starsIndex = 0;
 let bookStatusIndex = 0;
+let popupShowed = 0;
 
 function showBookForm() {
     overlay.style.display = 'block';
@@ -142,6 +143,28 @@ function createDeleteBtn(tr) {
     tr.appendChild(deleteCell);
 }
 
+function createTableCells() {
+    myLibrary.forEach((book) => {
+        const tr = document.createElement('tr');
+        tr.classList.add('book-row');
+        const titleCell = document.createElement('td');
+        const authorCell = document.createElement('td');
+        const pagesCell = document.createElement('td');
+        const yearCell = document.createElement('td');
+
+        titleCell.textContent = book.title;
+        authorCell.textContent = book.author;
+        pagesCell.textContent = book.pages;
+        yearCell.textContent = book.year;
+    
+        tr.append(titleCell, authorCell, pagesCell, yearCell);
+        createBookStatusBtn(tr, book.isRead);
+        createStars(tr, book.isRead,book.rateStars);
+        createDeleteBtn(tr);
+        tbody.appendChild(tr);
+    })
+}
+
 function changeBookStatus(statusBtn) {
     if(statusBtn.getAttribute('class') === 'book read-book-btn') {
         statusBtn.classList.remove('read-book-btn');
@@ -207,7 +230,7 @@ function createPopupRating(parent) {
     });
 }
 
-function showUpRatingStars(statusBtn) {
+function showPopupRating(statusBtn) {
     const starsCells = document.querySelectorAll('.stars-cell');
     const readBookBtnIndex = statusBtn.getAttribute('data-readButton-index');
 
@@ -219,6 +242,54 @@ function showUpRatingStars(statusBtn) {
     });
 
     myLibrary[readBookBtnIndex].isRead = true;
+    popupShowed = ++popupShowed;
+}
+
+function addStarsAfterPopup(statusBtn) {
+    const starsCells = document.querySelectorAll('.stars-cell');
+    const readBookBtnIndex = statusBtn.getAttribute('data-readButton-index');
+    const addStarsBtn = document.querySelector('.add-stars-btn');
+
+    addStarsBtn.addEventListener('click', () => {
+        starsCells.forEach((cell) => {
+            const starsContainerIndex = cell.getAttribute('data-star-index');
+            const rateValue = document.getElementById('popup-rate-value').value;
+            if(readBookBtnIndex === starsContainerIndex) {
+                const starsContainer = document.createElement('div');
+                const starsOverlay = document.createElement('div');
+            
+                    for(let i = 0; i < 5; i++) {
+                        const star = document.createElement('img');
+                        star.setAttribute('src', 'img/star.svg');
+                        starsContainer.appendChild(star);
+                    }
+            
+                overlayStars(starsOverlay, rateValue);
+                starsOverlay.classList.add('stars-overlay');
+                starsContainer.classList.add('stars-container');
+            
+                starsContainer.appendChild(starsOverlay);
+                cell.appendChild(starsContainer);
+            }
+        });
+    });
+}
+
+function manageBooksWithStatusBtn() {
+    const bookStatusBtns = document.querySelectorAll('.book');
+
+    bookStatusBtns.forEach((statusBtn) => {
+        statusBtn.addEventListener('click', () => {
+            changeBookStatus(statusBtn);
+            if(statusBtn.textContent === 'Not read') {
+                deleteStars(statusBtn);
+            }
+            if(statusBtn.textContent === 'Read') {
+                showPopupRating(statusBtn);
+            }
+            addStarsAfterPopup(statusBtn);
+        });
+    });
 }
 
 function displayBook() {
@@ -235,41 +306,8 @@ function displayBook() {
     starsIndex = 0;
     bookStatusIndex = 0;
 
-    myLibrary.forEach((book) => {
-        const tr = document.createElement('tr');
-        tr.classList.add('book-row');
-        const titleCell = document.createElement('td');
-        const authorCell = document.createElement('td');
-        const pagesCell = document.createElement('td');
-        const yearCell = document.createElement('td');
-
-        titleCell.textContent = book.title;
-        authorCell.textContent = book.author;
-        pagesCell.textContent = book.pages;
-        yearCell.textContent = book.year;
-    
-        tr.append(titleCell, authorCell, pagesCell, yearCell);
-        createBookStatusBtn(tr, book.isRead);
-        createStars(tr, book.isRead,book.rateStars);
-        createDeleteBtn(tr);
-        tbody.appendChild(tr);
-    })
-
-    const bookStatusBtns = document.querySelectorAll('.book');
-    bookStatusBtns.forEach((statusBtn) => {
-        statusBtn.addEventListener('click', () => {
-            changeBookStatus(statusBtn);
-
-            if(statusBtn.textContent === 'Not read') {
-                deleteStars(statusBtn);
-            }
-            
-            if(statusBtn.textContent === 'Read') {
-                showUpRatingStars(statusBtn);
-            }
-        });
-    });
-
+    createTableCells();
+    manageBooksWithStatusBtn();
     deleteBook();
 }
 

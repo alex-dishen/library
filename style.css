@@ -121,7 +121,8 @@ form button,
     color: rgb(117, 144, 224);
 }
 
-.stars-container {
+.stars-container,
+.popup-stars {
     position: relative;
     display: flex;
     justify-content: space-between;
@@ -164,12 +165,6 @@ img[src*='star'] {
     border-bottom: 10px solid transparent;
     right: 45%;
     bottom: -20px;
-}
-
-.popup-stars {
-    position: relative;
-    width: 115px;
-    margin: 0 auto;
 }
 
 .popup-rate-options {
