@@ -15,7 +15,6 @@ let myLibrary = [];
 let index = 0;
 let starsIndex = 0;
 let bookStatusIndex = 0;
-let popupShowed = 0;
 
 function showBookForm() {
     overlay.style.display = 'block';
@@ -36,8 +35,8 @@ function removeBookForm() {
     rateValue.value = 3.4;
 }
 
-//When checkbox of read/not read book is checked, shows option
-//to choose stars for rating
+// When checkbox of read/not read book is checked, option to choose stars
+//for rating is shown
 function showRatingOption() {
     if(checkBox.checked === true) {
         ratingOption.style.display = 'flex';
@@ -70,6 +69,28 @@ function getUserInput() {
 
     const book = new Book(title, author, pages, year, isRead, stars);
     myLibrary.push(book);
+}
+
+function createTableCells() {
+    myLibrary.forEach((book) => {
+        const tr = document.createElement('tr');
+        const titleCell = document.createElement('td');
+        const authorCell = document.createElement('td');
+        const pagesCell = document.createElement('td');
+        const yearCell = document.createElement('td');
+
+        tr.classList.add('book-row');
+        titleCell.textContent = book.title;
+        authorCell.textContent = book.author;
+        pagesCell.textContent = book.pages;
+        yearCell.textContent = book.year;
+    
+        tr.append(titleCell, authorCell, pagesCell, yearCell);
+        createBookStatusBtn(tr, book.isRead);
+        createStars(tr, book.isRead, book.rateStars);
+        createDeleteBtn(tr);
+        tbody.appendChild(tr);
+    })
 }
 
 function createBookStatusBtn(tr, isRead) {
@@ -115,17 +136,8 @@ function createStars(tr, isRead, rateValue) {
     tr.appendChild(starsCell);
 }
 
-function deleteStars(statusBtn) {
-    const starsCells = document.querySelectorAll('.stars-cell');
-    const readBookBtnIndex = statusBtn.getAttribute('data-readButton-index');
-
-    starsCells.forEach((cell) => {
-        const starsContainerIndex = cell.getAttribute('data-star-index');
-        if(readBookBtnIndex === starsContainerIndex) {
-                cell.replaceChildren();
-        }
-    });
-
+function deleteStars(cell, readBookBtnIndex) {
+    cell.replaceChildren();
     myLibrary[readBookBtnIndex].isRead = false;
 }
 
@@ -141,28 +153,6 @@ function createDeleteBtn(tr) {
     deleteCell.appendChild(deleteButton);
 
     tr.appendChild(deleteCell);
-}
-
-function createTableCells() {
-    myLibrary.forEach((book) => {
-        const tr = document.createElement('tr');
-        tr.classList.add('book-row');
-        const titleCell = document.createElement('td');
-        const authorCell = document.createElement('td');
-        const pagesCell = document.createElement('td');
-        const yearCell = document.createElement('td');
-
-        titleCell.textContent = book.title;
-        authorCell.textContent = book.author;
-        pagesCell.textContent = book.pages;
-        yearCell.textContent = book.year;
-    
-        tr.append(titleCell, authorCell, pagesCell, yearCell);
-        createBookStatusBtn(tr, book.isRead);
-        createStars(tr, book.isRead,book.rateStars);
-        createDeleteBtn(tr);
-        tbody.appendChild(tr);
-    })
 }
 
 function changeBookStatus(statusBtn) {
@@ -230,73 +220,68 @@ function createPopupRating(parent) {
     });
 }
 
-function showPopupRating(statusBtn) {
-    const starsCells = document.querySelectorAll('.stars-cell');
-    const readBookBtnIndex = statusBtn.getAttribute('data-readButton-index');
-
-    starsCells.forEach((cell) => {
-        const starsContainerIndex = cell.getAttribute('data-star-index');
-        if(readBookBtnIndex === starsContainerIndex) {
-                createPopupRating(cell)
-        }
-    });
-
+function showPopupRating(cell, readBookBtnIndex) {
+    createPopupRating(cell)
     myLibrary[readBookBtnIndex].isRead = true;
-    popupShowed = ++popupShowed;
 }
 
-function addStarsAfterPopup(statusBtn) {
-    const starsCells = document.querySelectorAll('.stars-cell');
-    const readBookBtnIndex = statusBtn.getAttribute('data-readButton-index');
+function addStarsAfterPopup(cell) {
     const addStarsBtn = document.querySelector('.add-stars-btn');
 
     addStarsBtn.addEventListener('click', () => {
-        starsCells.forEach((cell) => {
-            const starsContainerIndex = cell.getAttribute('data-star-index');
-            const rateValue = document.getElementById('popup-rate-value').value;
-            if(readBookBtnIndex === starsContainerIndex) {
-                const starsContainer = document.createElement('div');
-                const starsOverlay = document.createElement('div');
+        const rateValue = document.getElementById('popup-rate-value').value;
+        const starsContainer = document.createElement('div');
+        const starsOverlay = document.createElement('div');
             
-                    for(let i = 0; i < 5; i++) {
-                        const star = document.createElement('img');
-                        star.setAttribute('src', 'img/star.svg');
-                        starsContainer.appendChild(star);
-                    }
+        for(let i = 0; i < 5; i++) {
+            const star = document.createElement('img');
+            star.setAttribute('src', 'img/star.svg');
+            starsContainer.appendChild(star);
+        }
             
-                overlayStars(starsOverlay, rateValue);
-                starsOverlay.classList.add('stars-overlay');
-                starsContainer.classList.add('stars-container');
+        overlayStars(starsOverlay, rateValue);
+        starsOverlay.classList.add('stars-overlay');
+        starsContainer.classList.add('stars-container');
             
-                starsContainer.appendChild(starsOverlay);
-                cell.appendChild(starsContainer);
-            }
-        });
+        starsContainer.appendChild(starsOverlay);
+        cell.appendChild(starsContainer);
     });
 }
 
 function manageBooksWithStatusBtn() {
     const bookStatusBtns = document.querySelectorAll('.book');
+    const starsCells = document.querySelectorAll('.stars-cell');
 
     bookStatusBtns.forEach((statusBtn) => {
+        const readBookBtnIndex = statusBtn.getAttribute('data-readButton-index');
+
         statusBtn.addEventListener('click', () => {
             changeBookStatus(statusBtn);
-            if(statusBtn.textContent === 'Not read') {
-                deleteStars(statusBtn);
-            }
-            if(statusBtn.textContent === 'Read') {
-                showPopupRating(statusBtn);
-            }
-            addStarsAfterPopup(statusBtn);
+
+            starsCells.forEach((cell) => {
+                const starsContainerIndex = cell.getAttribute('data-star-index');
+
+                // The conditional statement below determines in which cell to
+                //perform the action depending on where the click occurred.
+                if(readBookBtnIndex === starsContainerIndex) {
+                    if(statusBtn.textContent === 'Not read') {
+                        deleteStars(cell, readBookBtnIndex);
+                    }
+                    if(statusBtn.textContent === 'Read') {
+                        showPopupRating(cell, readBookBtnIndex);
+                        addStarsAfterPopup(cell);
+                    }
+                }
+            });
         });
     });
 }
 
 function displayBook() {
     submitBtn.addEventListener('click', getUserInput);
-    //Deletes every single book and it's details from display NOT FROM myLibrary
+    // Deletes every single book and it's details from display NOT FROM myLibrary
     document.querySelectorAll('.book-row').forEach((book) => book.remove());
-    //3 book where created after page load, so right now the index = 2,
+    // 3 books where created after page load, so right now the index = 2,
     //when we create another book it's index = 6, because the code creates
     //3 books that are written in the code + book that user created. As we use
     //index variable for deleting Book object from array we need this line of
@@ -326,6 +311,7 @@ function deleteBook() {
     });
 }
 
+// Books on load
 const thinkLikeAProgrammer = new Book('Think like a programmer', 'V. Anton Spraul', 256, 2012, true, 2.8);
 const fightClub = new Book('Fight Club', 'Chuck Palaniuk', 224, 1996, true, 4.6);
 const elonMusk = new Book('Elon Musk', 'Ashlee Vance', 416, 2017, false);
