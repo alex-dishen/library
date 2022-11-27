@@ -14,9 +14,6 @@ The **Library** project is created according to the assignment from **The Odin P
 * If the user accidentally stated he/she 'Read' the book, he/she can change book status in the library to 'Not read'. If he/she does so, the stars will disappear.
 * If the user created the book with a status 'Not read', he/she can change it's status by clicking on 'Not read' button changing it to 'Read'. Then a little menu will appear to rate the book if user wants
 * Ability to delete book from the library
-## Will be implemented in the future:
-* Local storage
-* Log in
 
 ## **Outcome**
 * Used **HTML**
